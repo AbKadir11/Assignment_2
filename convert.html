@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(1,1,1,0.5);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: inline-block;
+      width: 100px;
+      font-weight: bold;
+    }
+    .form-group input[type="number"] {
+      width: 150px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    .form-group input[type="number"]:focus {
+      outline: none;
+      border-color: dodgerblue;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Currency Converter</h1>
+    <form id="currencyForm">
+      <div class="form-group">
+        <label for="usd">USD:</label>
+        <input type="number" id="usd" step="0.01" min="0" oninput="convertCurrency(this.value, 'usd')" required>
+      </div>
+      <div class="form-group">
+        <label for="eur">EUR:</label>
+        <input type="number" id="eur" step="0.01" min="0" oninput="convertCurrency(this.value, 'eur')" readonly>
+      </div>
+      <div class="form-group">
+        <label for="gbp">GBP:</label>
+        <input type="number" id="gbp" step="0.01" min="0" oninput="convertCurrency(this.value, 'gbp')" readonly>
+      </div>
+      <div class="form-group">
+        <label for="jpy">JPY:</label>
+        <input type="number" id="jpy" step="1" min="0" oninput="convertCurrency(this.value, 'jpy')" readonly>
+      </div>
+      <div class="form-group">
+        <label for="inr">INR:</label>
+        <input type="number" id="inr" step="0.01" min="0" oninput="convertCurrency(this.value, 'inr')" readonly>
+      </div>
+    </form>
+    <div class="result" id="conversionResult"></div>
+  </div>
+
+  <script>
+    // Conversion rates (as an example, you can replace these with actual rates)
+    const conversionRates = {
+      usd: 1,
+      eur: 0.88,
+      gbp: 0.78,
+      jpy: 110.39,
+      inr: 74.52
+    };
+
+    // Function to convert currency based on input value and target currency
+    function convertCurrency(value, currency) {
+      value = parseFloat(value);
+      const usdValue = value / conversionRates[currency];
+      document.getElementById('usd').value = usdValue.toFixed(2);
+      
+      // Convert USD to other currencies
+      document.getElementById('eur').value = (usdValue * conversionRates.eur).toFixed(2);
+      document.getElementById('gbp').value = (usdValue * conversionRates.gbp).toFixed(2);
+      document.getElementById('jpy').value = (usdValue * conversionRates.jpy).toFixed(2);
+      document.getElementById('inr').value = (usdValue * conversionRates.inr).toFixed(2);
+      
+      // Display conversion result
+      document.getElementById('conversionResult').textContent = `Converted ${value} USD to other currencies.`;
+    }
+  </script>
+</body>
+</html>

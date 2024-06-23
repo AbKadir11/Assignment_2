@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Choice Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #E8E8E8;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #FFFFFF;
+      box-shadow: 0 0 10px rgba(1,1,1,0.5);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .answers {
+      display: flex;
+      justify-content: center;
+    }
+    .answers label {
+      margin-right: 10px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Multiple Choice Quiz</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Quiz questions and answers
+    const quizData = [
+      {
+        question: "Where the Vibrananium is found the most?",
+        options: ["A) Brooklyn", "B) Wakanda", "C) New York"],
+        answer: "B"
+      },
+      {
+        question: "Who is the most genius in MARVEL?",
+        options: ["A) Tony Stark", "B) Bruce Banner", "C) Peter Parker"],
+        answer: "A"
+      },
+      {
+        question: "Who is the most stupid and useless character in Marvel?",
+        options: ["A) Gamora", "B) Groot", "C) Star Lord"],
+        answer: "C"
+      },
+      {
+        question: "Which character is the best in MARVEL?",
+        options: ["A) Tony Stark", "B) Thor", "C) Hulk"],
+        answer: "A"
+      },
+      {
+        question: "What is the latest suit of IRON MAN?",
+        options: ["A) Mark 80", "B) Mark 83", "C) Mark 85"],
+        answer: "C"
+      },
+      {
+        question: "Who is the first avenger in Marvel?",
+        options: ["A) Iron Man", "B) Captain America", "C) Thor"],
+        answer: "A"
+      },
+      {
+        question: "What is the color of Hulk?",
+        options: ["A) Green", "B) Red", "C) Blue"],
+        answer: "A"
+      },
+      {
+        question: "Who has an eye patch in Marvel?",
+        options: ["A) Thor", "B) Rocket", "C) Nick Fury"],
+        answer: "B"
+      },
+      {
+        question: "What is Nick Fury's Organization?",
+        options: ["A) SHEILD", "B) Hydra", "C) SWORD"],
+        answer: "A"
+      },
+      {
+        question: "Who wears full vibranium suit?",
+        options: ["A) Iron Man", "B) Black Panther", "C) Spider Man"],
+        answer: "B"
+      },
+    ];
+
+    // Function to start the quiz
+    function startQuiz(numQuestions = 5) {
+      const shuffledQuestions = shuffleArray(quizData).slice(0, numQuestions);
+      let correctAnswers = 0;
+      let quizHtml = '';
+
+      shuffledQuestions.forEach((questionObj, index) => {
+        const { question, options, answer } = questionObj;
+        const questionNumber = index + 1;
+        quizHtml += `
+          <div class="question">
+            <p>${questionNumber}. ${question}</p>
+            <div class="answers">
+              ${options.map(option => `<label><input type="radio" name="question${questionNumber}" value="${option.charAt(0)}"> ${option}</label>`).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      quizHtml += `<button onclick="submitQuiz(${numQuestions})">Submit Quiz</button>`;
+      document.getElementById('quiz').innerHTML = quizHtml;
+    }
+
+    // Function to submit quiz and calculate results
+    function submitQuiz(numQuestions) {
+      let correctAnswers = 0;
+      let resultHtml = '<h2>Quiz Results</h2>';
+
+      for (let i = 0; i < numQuestions; i++) {
+        const questionNumber = i + 1;
+        const selectedOption = document.querySelector(`input[name="question${questionNumber}"]:checked`);
+        if (selectedOption) {
+          const userAnswer = selectedOption.value;
+          const correctAnswer = quizData[i].answer;
+          resultHtml += `<p>${quizData[i].question}<br>You guessed ${userAnswer}) ${selectedOption.nextSibling.textContent.trim()}<br>`;
+          if (userAnswer === correctAnswer) {
+            resultHtml += `CORRECT</p>`;
+            correctAnswers++;
+          } else {
+            resultHtml += `INCORRECT: the correct answer is ${correctAnswer}) ${quizData[i].options.find(opt => opt.startsWith(correctAnswer))}</p>`;
+          }
+        } else {
+          resultHtml += `<p>${quizData[i].question}<br>No answer given<br>INCORRECT: the correct answer is ${quizData[i].answer}) ${quizData[i].options.find(opt => opt.startsWith(quizData[i].answer))}</p>`;
+        }
+      }
+
+      const percentageCorrect = ((correctAnswers / numQuestions) * 100).toFixed(2);
+      resultHtml += `<div class="result">You got ${correctAnswers} out of ${numQuestions} (${percentageCorrect}%) correct.</div>`;
+      document.getElementById('result').innerHTML = resultHtml;
+    }
+
+    
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    
+    const numQuestions = parseInt(prompt("Enter question number (default is 10):") || 10);
+    startQuiz(numQuestions);
+  </script>
+</body>
+</html>
